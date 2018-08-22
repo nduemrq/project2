@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="text-white bg-primary input-group-text">Your message</span>
+                                <span class="text-white bg-primary input-group-text" id="messageInput">Your message</span>
                             </div>
                             <input name="" id="message" class="form-control" type="text">
                             <div class="input-group-append">
@@ -33,20 +33,25 @@
                 </form>
             </div>
             <div class="col-4">
-                <form>
+                <form id="createChannel">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">New chanel</span>
                             </div>
-                            <input type="text" class="form-control" id="createChanel" placeholder="name">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit">Create</button></div>
+                            <input type="text" class="form-control" id="channelName" placeholder="name">
+                            <div class="input-group-append" id="submitChannelGroup">
+                                <button class="btn btn-outline-secondary" id="submitChannelName" type="submit">Create</button>
+                            </div>
                         </div>
+
                     </div>
-                    <label for="listChanel">Select channel:</label>
+                    <label for="listChannel">Select channel:</label>
                     <div class="form-group">
-                        <select multiple name="" id="listChanel" class="form-control">
+                        <select multiple name="" id="listChannel" class="form-control">
+                        {% for channelName in channelList %}
+                        <option value="{{ channelName }}">{{ channelName }}</option>
+                        {% endfor %}
 
 <!--                    <option value="1">1</option>-->
 
