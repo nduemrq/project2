@@ -49,13 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // When add channel name to channel list, put channelName to select option
     socket.on('channel new', data => {
         if (document.querySelector('.error')){
-        document.querySelector('#submitChannelGroup').removeChild(HTMLSpanElement);
+       document.querySelector('#submitChannelGroup').removeChild(HTMLSpanElement);
         };
 
         const option = documnet.createElement("option");
         option.setAttribute("value", data);
         option.innerHTML = data;
-        document.querySelector('#listChennel').appendChild(option);
+        document.querySelector('#listChannel').appendChild(option);
 
     });
 
