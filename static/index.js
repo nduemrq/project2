@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
        document.querySelector('#submitChannelGroup').removeChild(HTMLSpanElement);
         };
 
-        const option = documnet.createElement("option");
+        const option = document.createElement("option");
         option.setAttribute("value", data);
         option.innerHTML = data;
         document.querySelector('#listChannel').appendChild(option);
