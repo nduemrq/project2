@@ -4,6 +4,11 @@ if (!localStorage.getItem('userName')) {
         } while (! /^[a-z0-9]+$/gi.test(userName));
         localStorage.setItem('userName', userName);
 }
+function removeBadge(badge) {
+        if (badge){
+            badge.parentNode.removeChild(badge);
+        };
+};
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -34,9 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Receive when channel name exist
     socket.on('channel error', data => {
         // Remove old badge
-        if (document.querySelector('.error')){
-        document.querySelector('#submitChannelGroup').removeChild(HTMLSpanElement);
-        };
+        removeBadge(document.querySelector('.error'));
 
         // Setup new badge
         const span = document.createElement("span");
@@ -48,15 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // When add channel name to channel list, put channelName to select option
     socket.on('channel new', data => {
-        if (document.querySelector('.error')){
-       document.querySelector('#submitChannelGroup').removeChild(HTMLSpanElement);
-        };
+        // Remove old badge
+        removeBadge(document.querySelector('.error'));
 
+        // Add new channel name to list
         const option = document.createElement("option");
         option.setAttribute("value", data);
         option.innerHTML = data;
         document.querySelector('#listChannel').appendChild(option);
-
     });
 
 
