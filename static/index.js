@@ -4,11 +4,12 @@ if (!localStorage.getItem('userName')) {
         } while (! /^[a-z0-9]+$/gi.test(userName));
         localStorage.setItem('userName', userName);
 }
+
 function removeBadge(badge) {
         if (badge){
             badge.parentNode.removeChild(badge);
-        };
-};
+        }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -34,9 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
             socket.emit('submit channel', channelName);
             return false;
         };
+
+        // When secected one of channel list
+        document.querySelector('#listChannel').onclick =
+        function() {
+            socket.emit('channel selected', this.value);
+           // return false;
+        };
     });
 
-    // Receive when channel name exist
+    // When channel name exiest
     socket.on('channel error', data => {
         // Remove old badge
         removeBadge(document.querySelector('.error'));
@@ -49,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    // When add channel name to channel list, put channelName to select option
+    // When add channel name to channel list, put channelName to select>option
     socket.on('channel new', data => {
         // Remove old badge
         removeBadge(document.querySelector('.error'));
@@ -61,6 +69,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#listChannel').appendChild(option);
     });
 
+    // When flask return message
+    socket.on('channel message', message => {
+        const li = document.createElement('li');
+        li.setAttribute('class', 'list-group-item list-group-item-light');
+        li.innerHTML = message;
+        document.querySelector('#messageList').appendChild(li);
+    });
+
 
 //    localStorage.clear();
 });
+
+/*
+TO DO LIST:
+
+- validate user name - implement funkction when user name is busy
+
+- reverse channel list display
+- new channel neme must be on top of the list
+
+*/
