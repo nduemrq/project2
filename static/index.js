@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('channel message', message => {
         const li = document.createElement('li');
         li.setAttribute('class', 'list-group-item list-group-item-light');
-        li.innerHTML = message;
+        li.innerHTML = message['userName'] + ' ' + message['date'] + '</br>' + message['msg'];
         document.querySelector('#messageList').appendChild(li);
     });
 
