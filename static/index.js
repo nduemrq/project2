@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         option.setAttribute("value", data);
         option.innerHTML = data;
         document.querySelector('#listChannel').appendChild(option);
+        option.scrollIntoView();
     });
 
     // When flask return message
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.setAttribute('class', 'list-group-item list-group-item-light');
             li.innerHTML = message['userName'] + '<br> ' + message['date'] + '<br>' + message['msg'];
             document.querySelector('#messageList').appendChild(li);
+            li.scrollIntoView();
         }
     });
 
