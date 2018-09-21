@@ -4,6 +4,9 @@ if (!localStorage.getItem('userName')) {
         } while (! /^[a-z0-9]+$/gi.test(userName));
         localStorage.setItem('userName', userName);
 }
+if (!localStorage.getItem('channelSelected')){
+    localStorage.setItem('channelSelected', 'test 01');
+}
 
 function removeBadge(badge) {
         if (badge){
@@ -33,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#createChannel').onsubmit = () => {
             var channelName = document.querySelector('#channelName').value;
             socket.emit('submit channel', channelName);
+            document.querySelector('#channelName').value = '';
             return false;
         };
 
@@ -40,7 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#listChannel').onclick =
         function() {
             socket.emit('channel selected', this.value);
-           // return false;
+            localStorage.setItem('channelSelected', this.value);
+        };
+
+        // Send message
+        document.querySelector('#messageForm').onsubmit = () => {
+            socket.emit('new message',
+                        localStorage.getItem('userName'), document.querySelector('#message').value, localStorage.getItem('channelSelected'));
+
+            document.querySelector('#message').value = '';
+            return false;
         };
     });
 
@@ -71,12 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // When flask return message
     socket.on('channel message', message => {
-        const li = document.createElement('li');
-        li.setAttribute('class', 'list-group-item list-group-item-light');
-        li.innerHTML = message['userName'] + ' ' + message['date'] + '</br>' + message['msg'];
-        document.querySelector('#messageList').appendChild(li);
+        if (message['channel'] == localStorage.getItem('channelSelected')) {
+            const li = document.createElement('li');
+            li.setAttribute('class', 'list-group-item list-group-item-light');
+            li.innerHTML = message['userName'] + '<br> ' + message['date'] + '<br>' + message['msg'];
+            document.querySelector('#messageList').appendChild(li);
+        }
     });
-
 
 //    localStorage.clear();
 });

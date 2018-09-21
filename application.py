@@ -31,7 +31,7 @@ class Chat:
             self._chatStorage[channelName] = []
 
             # initialize first msg
-            self.addMessage('* system *', f'Welcome to {channelName} channel.', channelName)
+            self.addMessage('*** system *** ', f'Welcome to {channelName} channel.', channelName)
 
     def delChannel(self, channelName):
         pass
@@ -45,24 +45,29 @@ class Chat:
             yield m.showMsg()
 
     def addMessage(self, userName, message, channelName):
-        msg = Msg(userName, asctime(), message)
+        msg = Msg(userName, asctime(), message, channelName)
         if len(self._chatStorage[channelName]) < 100:
             self._chatStorage[channelName].append(msg)
         else:
             self._chatStorage[channelName].pop(0)
             self._chatStorage[channelName].append(msg)
+        return msg
 
 
 class Msg:
-    def __init__(self, userName, date, msg):
+    def __init__(self, userName, date, msg, channel):
         self.userName = userName
         self.date = date
         self.msg = msg
+        self.channel = channel
 
     def showMsg(self):
-        return dict(userName = self.userName,
-                      date = self.date,
-                      msg = self.msg)
+        return dict(
+            userName = self.userName,
+            date = self.date,
+            msg = self.msg,
+            channel = self.channel
+        )
 
 # chat instance
 chat = Chat()
@@ -97,3 +102,8 @@ def channelSelected(data):
     for msg in chat.showMessage(data):
         emit('channel message', msg)
 
+
+@socketio.on("new message")
+def newMessage(user, message, channel):
+    newMessage = chat.addMessage(user, message, channel)
+    emit('channel message', newMessage.showMsg(), broadcast=True)
